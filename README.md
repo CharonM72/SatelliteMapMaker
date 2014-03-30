@@ -3,18 +3,19 @@ SatelliteMapMaker
 
 Creates a satellite imagery-like map of Dwarf Fortress worlds!
 
-Download the latest version here: https://github.com/CharonM72/SatelliteMapMaker
+**Download the latest version here: https://github.com/CharonM72/SatelliteMapMaker**
 
-Bugs? Suggestions? Submit them here: https://github.com/CharonM72/SatelliteMapMaker/issues
+*Bugs? Suggestions? Submit them here: https://github.com/CharonM72/SatelliteMapMaker/issues*
 
-Bay 12 forum thread here: http://www.bay12forums.com/smf/index.php?topic=137076.0
+*Bay 12 forum thread here: http://www.bay12forums.com/smf/index.php?topic=137076.0*
 
 The Satellite Map Maker for Dwarf Fortress was created by CharonM72, based off of code by PeridexisErrant (batch script), Parker147 and GFXiNXS (GIMP script).
 
 This script is released under the GPL3, or as CC-BY-SA-NC at your option.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html
 
 
-___________INSTRUCTIONS_______________
+INSTRUCTIONS
+--------------
 
 
 Unzip all the files into the same directory. This can be into your Dwarf Fortress directory, or any other directory where you keep exported Legends Mode detailed maps.
@@ -37,28 +38,29 @@ This script also supports installation to PeridexisErrant's Lazy Newb Pack as a 
 
 If you have any problems, please sumbit a bug on GitHub (link at top) and/or mention it on the thread at the Bay 12 Forums.
 
-___________VERSION HISTORY_______________
+VERSION HISTORY
+--------------
 
-v1.3
--Moved to GitHub
--Moved extraneous files to SM_data folder for reduced clutter.
--Improved GIMP finding (thanks PeridexisErrant)
--Improved script copy efficiency (thanks PeridexisErrant again)
--A bunch of other improvements to the batch file
+2014-03-30 v1.3
+- Moved to GitHub
+- Moved extraneous files to SM_data folder for reduced clutter.
+- Improved GIMP finding (thanks PeridexisErrant)
+- Improved script copy efficiency (thanks PeridexisErrant again)
+- A bunch of other improvements to the batch file
 
 2014-03-18 v1.2
--Changed name of program from Realistic Map Maker to Satellite Map Maker.
--Added ability to adjust atmosphere levels.
--Overhauled batch file:
---Copy GIMP script to GIMP user folder instead of system user folder
---Automatically install script file instead of helping user manually do it (thanks PeridexisErrant)
---Automatically check if local script is different than installed and update as needed
---Expanded GIMP detection ability to find more versions of GIMP
---More useful error messages
--Updated Readme file, adding version history etc.
+- Changed name of program from Realistic Map Maker to Satellite Map Maker.
+- Added ability to adjust atmosphere levels.
+- Overhauled batch file:
+- - Copy GIMP script to GIMP user folder instead of system user folder
+- - Automatically install script file instead of helping user manually do it (thanks PeridexisErrant)
+- - Automatically check if local script is different than installed and update as needed
+- - Expanded GIMP detection ability to find more versions of GIMP
+- - More useful error messages
+- Updated Readme file, adding version history etc.
 
 2014-03-13 v1.1
--Updated Readme file.
+- Updated Readme file.
 
 2014-03-13 v1.0
--Initial release.
+- Initial release.
