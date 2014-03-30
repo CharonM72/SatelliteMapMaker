@@ -1,7 +1,12 @@
-@echo off
+::@echo off
 SETLOCAL
 
+:: This script was mostly written by PeridexisErrant.
+:: Run as GetGimpInstallLocationSMM.cmd [AUTOMODE] [GIMP_version]
+
 IF %1!==AUTOMODE! GOTO :SkipUserInput
+SHIFT
+IF NOT %1!==! SET "gimpVersion=%1"
 
 echo GIMP couldn't be found in the default locations. Enter the location of your
 echo gimp installation or leave blank to scan for it.
@@ -14,17 +19,45 @@ if exist "%UserGimpLocation%\bin\gimp-console-*.exe" call :SubGetExeName "%UserG
 if exist "%UserGimpLocation%\gimp-console-*.exe" call :SubGetExeName "%UserGimpLocation%\"
 
 :SkipUserInput
+
+
+SHIFT
+IF NOT %1!==! SET "gimpVersion=%1"
 if "%UserGimpLocation%"=="" CALL :ScanForIt
 
 if "%LNPGimpLocation%"=="" (
-    echo.
-    goto :TheEnd
+	echo %gimpLocation%
+	goto :TheEnd
 )
 
-echo %LNPGimpLocation%
+echo %LNPGimpLocation%!
 GOTO :TheEnd
 
 :ScanForIt
+
+
+:: Scans the most common locations
+IF NOT %gimpVersion%!==! (
+	IF EXIST "%programfiles%\GIMP 2\bin\gimp-console-%gimpVersion%.exe" (
+		SET gimpLocation="%programfiles%\GIMP 2\bin\gimp-console-%gimpVersion%.exe"
+		GOTO :EOF
+		)
+	IF EXIST "%programfiles% (x86)\GIMP 2\bin\gimp-console-%gimpVersion%.exe" (
+		SET gimpLocation="%programfiles% (x86)\GIMP 2\bin\gimp-console-%gimpVersion%.exe"
+		GOTO :EOF
+		)
+	IF EXIST "%programfiles%\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe" (
+		SET gimpLocation="%programfiles%\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe"
+		GOTO :EOF
+		)
+	IF EXIST "%programfiles% (x86)\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe" (
+		SET gimpLocation="%programfiles% (x86)\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe"
+		GOTO :EOF
+		)
+	)
+	
+:BruteForce
+
 
 rem echo Checking Registry ...
 
@@ -48,4 +81,3 @@ GOTO :EOF
 
 
 :TheEnd
-rem pause

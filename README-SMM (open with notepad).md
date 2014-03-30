@@ -1,5 +1,13 @@
-Satellite Map Maker v1.2
+SatelliteMapMaker
+=================
 
+Creates a satellite imagery-like map of Dwarf Fortress worlds!
+
+Download the latest version here: https://github.com/CharonM72/SatelliteMapMaker
+
+Bugs? Suggestions? Submit them here: https://github.com/CharonM72/SatelliteMapMaker/issues
+
+Bay 12 forum thread here: http://www.bay12forums.com/smf/index.php?topic=137076.0
 
 The Satellite Map Maker for Dwarf Fortress was created by CharonM72, based off of code by PeridexisErrant (batch script), Parker147 and GFXiNXS (GIMP script).
 
@@ -7,7 +15,6 @@ This script is released under the GPL3, or as CC-BY-SA-NC at your option.  The G
 
 
 ___________INSTRUCTIONS_______________
-
 
 
 Unzip all the files into the same directory. This can be into your Dwarf Fortress directory, or any other directory where you keep exported Legends Mode detailed maps.
@@ -26,10 +33,18 @@ The resulting realistic world map will be saved to the directory with all the ot
 
 If you'd like, once the GIMP script is installed, you can run it through GIMP's UI. To do this, in GIMP click File -> Create -> Dwarf Map -> "Create realistic DF map...", then load the appropriate images. The result will be in editable layers.
 
-If you have any problems, please mention it on the thread at the Bay 12 Forums.
+This script also supports installation to PeridexisErrant's Lazy Newb Pack as a utility.
+
+If you have any problems, please sumbit a bug on GitHub (link at top) and/or mention it on the thread at the Bay 12 Forums.
 
 ___________VERSION HISTORY_______________
 
+v1.3
+-Moved to GitHub
+-Moved extraneous files to SM_data folder for reduced clutter.
+-Improved GIMP finding (thanks PeridexisErrant)
+-Improved script copy efficiency (thanks PeridexisErrant again)
+-A bunch of other improvements to the batch file
 
 2014-03-18 v1.2
 -Changed name of program from Realistic Map Maker to Satellite Map Maker.
