@@ -1,7 +1,13 @@
 @ECHO OFF
 SETLOCAL
 
-:: This program's code is largely taken from PeridexisErrant's __Process Legends Exports.bat script. It does only the fantasy map making part, with a number of modifications, and edited to make a realistic satellite-image-like map.
+:: Satellite Map Maker
+
+:: Creates a satellite imagery-like map of Dwarf Fortress worlds!
+
+:: Written by CharonM72
+
+:: This script is released under the GPL3 to the extent that I (CharonM72) can do so.  It incorporates code written by PeridexisErrant, Parker147 and YukiHyou.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html
 
 echo Welcome to CharonM72's Dwarf Fortress Satellite Map Maker v1.3!
 echo.
@@ -27,12 +33,12 @@ IF NOT EXIST "%CD%\Dwarf Fortress.exe" IF EXIST "%CD%\..\..\..\Dwarf Fortress 0.
 
 :: set region ID, to use in rest of script, works for 1-99 inclusive, if site maps only sets "unknown region"
 FOR /L %%G IN (999,-1,1) DO (
-	IF EXIST "%CD%\*region%%G*"  (
+	IF EXIST "%~dp0\*region%%G*"  (
 		set "region#=region%%G"
 		goto find_gimp
 		)
 	)
-If exist "%CD%\site_map-*.bmp"  (
+If exist "%~dp0\site_map-*.bmp"  (
 	set "region#=unknown region"
 	goto find_gimp
 	)
@@ -43,7 +49,8 @@ If exist "%CD%\site_map-*.bmp"  (
 echo No region map files found, or not enough found.
 echo.
 echo Make sure you did not rename or relocate the files, then run this again.
-pause
+echo.
+timeout /t 60
 goto end
 
 :textures_not_found
@@ -52,28 +59,29 @@ goto end
 echo Texture files not found.
 echo.
 echo Make sure the sat_trees, sat_mountains and sat_dirt BMP files are in the same directory as this BAT file.
-pause
+echo.
+timeout /t 60
 goto end
 
 :find_gimp
 
 echo Processing map exports from %region#%.
 :: check if the maps used by the GIMP script are present
-if not exist "%CD%\*-elw-*.bmp" goto maps_not_found
-if not exist "%CD%\*-el-*.bmp" goto maps_not_found
-if not exist "%CD%\*-veg-*.bmp" goto maps_not_found
-if not exist "%CD%\*-vol-*.bmp" goto maps_not_found
-if not exist "%CD%\*-tmp-*.bmp" goto maps_not_found
-if not exist "%CD%\*-bm-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-elw-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-el-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-veg-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-vol-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-tmp-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-bm-*.bmp" goto maps_not_found
 echo Found map images.
-if not exist "%CD%\SMM_data\sat_trees.bmp" goto textures_not_found
-if not exist "%CD%\SMM_data\sat_mountains.bmp" goto textures_not_found
-if not exist "%CD%\SMM_data\sat_dirt.bmp" goto textures_not_found
+if not exist "%~dp0\SMM_data\sat_trees.bmp" goto textures_not_found
+if not exist "%~dp0\SMM_data\sat_mountains.bmp" goto textures_not_found
+if not exist "%~dp0\SMM_data\sat_dirt.bmp" goto textures_not_found
 echo Found texture files.
 
 :: check for GIMP via the user folder
 IF NOT EXIST "%userprofile%\.gimp-*" goto gimp_not_found
-echo Searching for GIMP...
+echo Searching for GIMP (this may take a minute)...
 for /f "usebackq tokens=*" %%f in (`dir /s /b "%userprofile%\.gimp-*"`) do (
 	SET scriptFolder="%%f"
 )
@@ -83,22 +91,25 @@ SET scriptFolder=%scriptFolder:~1,-1%
 SET gimpVersion=%scriptFolder:*.gimp-=%
 
 rem check for GIMP install location (calls external .cmd file)
-for /f "usebackq tokens=*" %%d in (`"%CD%\SMM_data\GetGimpInstallLocationSMM.cmd" AUTOMODE %gimpVersion%`) do (
+for /f "usebackq tokens=*" %%d in (`"%~dp0\SMM_data\GetGimpInstallLocationSMM.cmd" AUTOMODE %gimpVersion%`) do (
 	SET gimpLocation="%%d"
 )
+
 :: get rid of surrounding double quotes
 SET gimpLocation=%gimpLocation:~1,-1%
+
+if %gimpLocation%!==! goto :gimp_not_found
 
 :copy_script
 
 
 echo GIMP version %gimpVersion% found.
 :: copy Scheme file to GIMP folder if it's not there or has been changed
-if not exist "%CD%\SMM_data\SatMapMaker.scm" (
+if not exist "%~dp0\SMM_data\SatMapMaker.scm" (
 	if not exist "%scriptFolder%\scripts\SatMapMaker.scm" goto script_not_found
 	)
 echo Installing script (if necessary)...
-ROBOCOPY "%CD%\SMM_data" "%scriptFolder%\scripts" "SatMapMaker.scm" /NFL /NDL /NJH /NJS /nc /ns /np
+ROBOCOPY "%~dp0\SMM_data" "%scriptFolder%\scripts" "SatMapMaker.scm" /NFL /NDL /NJH /NJS /nc /ns /np
 echo Done.
 goto set_atmosphere
 
@@ -108,7 +119,8 @@ goto set_atmosphere
 echo The Satellite Map Maker script was not found either installed or in the current directory.
 echo.
 echo Please put a copy of the .scm file into this directory, and it will be installed automatically next time.
-pause
+echo.
+timeout /t 60
 goto end
 
 :gimp_not_found
@@ -121,7 +133,8 @@ echo.
 echo It also may occur if you've never run GIMP before
 echo.
 echo Please install GIMP, and run it at least once.
-pause
+echo.
+timeout /t 60
 goto end
 
 :set_atmosphere
@@ -174,6 +187,7 @@ echo Running GIMP (should take less than a minute)...
 start /wait "" %gimpLocation% -d -f -i -b "(create-save-satellite \"%water%\" \"%elevation%\" \"%vegetation%\" \"%volcanism%\" \"%temperature%\" \"%biome%\" \"%trees%\" \"%dirt%\" \"%mountains%\" %atmosphere% \"%mapName%\")"
 
 echo Program completed.
-pause
+echo.
+timeout /t 30
 
 :end

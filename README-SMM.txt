@@ -9,7 +9,7 @@ Creates a satellite imagery-like map of Dwarf Fortress worlds!
 
 *Bay 12 forum thread here: http://www.bay12forums.com/smf/index.php?topic=137076.0*
 
-The Satellite Map Maker for Dwarf Fortress was created by CharonM72, based off of code by PeridexisErrant (batch script), Parker147 and GFXiNXS (GIMP script).
+The Satellite Map Maker for Dwarf Fortress was created by CharonM72, based off of code by PeridexisErrant (batch script), Parker147, GFXiNXS, and YukiHyou (GIMP script).
 
 This script is released under the GPL3, or as CC-BY-SA-NC at your option.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html
 

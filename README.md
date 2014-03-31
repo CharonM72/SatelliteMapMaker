@@ -9,7 +9,7 @@ Creates a satellite imagery-like map of Dwarf Fortress worlds!
 
 *Bay 12 forum thread here: http://www.bay12forums.com/smf/index.php?topic=137076.0*
 
-The Satellite Map Maker for Dwarf Fortress was created by CharonM72, based off of code by PeridexisErrant (batch script), Parker147 and GFXiNXS (GIMP script).
+The Satellite Map Maker for Dwarf Fortress was created by CharonM72, based off of code by PeridexisErrant (batch script), Parker147, GFXiNXS, and YukiHyou (GIMP script).
 
 This script is released under the GPL3, or as CC-BY-SA-NC at your option.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html
 
@@ -18,7 +18,7 @@ INSTRUCTIONS
 --------------
 
 
-Unzip all the files into the same directory. This can be into your Dwarf Fortress directory, or any other directory where you keep exported Legends Mode detailed maps.If downloading from GitHub, download just the .zip file; it has everything you need. If from DFFD, that's just the zip file anyway so you're fine. Unzip all the files into the same directory. This can be into your Dwarf Fortress directory, or any other directory where you keep exported Legends Mode detailed maps.
+If downloading from GitHub, download just the .zip file; it has everything you need. If from DFFD, that's just the zip file anyway so you're fine. Unzip all the files into the same directory. This can be into your Dwarf Fortress directory, or any other directory where you keep exported Legends Mode detailed maps.
 
 This script requires the GIMP to be installed. The script will check automatically for common install locations. If it can't find it (maybe you installed to a custom directory, or have a version of GIMP this script doesn't recognize), you can manually edit the .bat file and point one of the checks toward your actual directory (also set the gimpLocation and scriptFolder variables to the correct places).
 
