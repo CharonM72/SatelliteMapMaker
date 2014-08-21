@@ -67,12 +67,12 @@ goto end
 
 echo Processing map exports from %region#%.
 :: check if the maps used by the GIMP script are present
-if not exist "%~dp0\*-elw-*.bmp" goto maps_not_found
-if not exist "%~dp0\*-el-*.bmp" goto maps_not_found
-if not exist "%~dp0\*-veg-*.bmp" goto maps_not_found
-if not exist "%~dp0\*-vol-*.bmp" goto maps_not_found
-if not exist "%~dp0\*-tmp-*.bmp" goto maps_not_found
-if not exist "%~dp0\*-bm-*.bmp" goto maps_not_found
+if not exist "%~dp0\*-elw*.bmp" goto maps_not_found
+if not exist "%~dp0\*-el*.bmp" goto maps_not_found
+if not exist "%~dp0\*-veg*.bmp" goto maps_not_found
+if not exist "%~dp0\*-vol*.bmp" goto maps_not_found
+if not exist "%~dp0\*-tmp*.bmp" goto maps_not_found
+if not exist "%~dp0\*-bm*.bmp" goto maps_not_found
 echo Found map images.
 if not exist "%~dp0\SMM_data\sat_trees.bmp" goto textures_not_found
 if not exist "%~dp0\SMM_data\sat_mountains.bmp" goto textures_not_found
@@ -90,7 +90,7 @@ SET scriptFolder=%scriptFolder:~1,-1%
 :: retrieve GIMP version from folder name
 SET gimpVersion=%scriptFolder:*.gimp-=%
 
-rem check for GIMP install location (calls external .cmd file)
+:: check for GIMP install location (calls external .cmd file)
 for /f "usebackq tokens=*" %%d in (`"%~dp0\SMM_data\GetGimpInstallLocationSMM.cmd" AUTOMODE %gimpVersion%`) do (
 	SET gimpLocation="%%d"
 )
@@ -161,12 +161,12 @@ echo Atmosphere set to %atmosphere%.
 :: The following is taken from the DwarfMapMaker script, by Parker147.  It relies on the GIMP script he wrote, with modifications.  
 set "mapName=SatMapMaker-%region#%.bmp"
 
-for %%i in (*-elw-*) do set water=%%~fi
-for %%i in (*-el-*)  do set elevation=%%~fi
-for %%i in (*-veg-*) do set vegetation=%%~fi
-for %%i in (*-vol-*) do set volcanism=%%~fi
-for %%i in (*-tmp-*) do set temperature=%%~fi
-for %%i in (*-bm-*)  do set biome=%%~fi
+for %%i in (*-elw*) do set water=%%~fi
+for %%i in (*-el*)  do set elevation=%%~fi
+for %%i in (*-veg*) do set vegetation=%%~fi
+for %%i in (*-vol*) do set volcanism=%%~fi
+for %%i in (*-tmp*) do set temperature=%%~fi
+for %%i in (*-bm*)  do set biome=%%~fi
 for %%i in (SMM_data\sat_mountains.bmp)  do set mountains=%%~fi
 for %%i in (SMM_data\sat_trees.bmp)  do set trees=%%~fi
 for %%i in (SMM_data\sat_dirt.bmp)  do set dirt=%%~fi
@@ -184,7 +184,7 @@ set outputFile=%outputFile:\=\\%
 
 echo Running GIMP (should take less than a minute)...
 
-start /wait "" %gimpLocation% -d -f -i -b "(create-save-satellite \"%water%\" \"%elevation%\" \"%vegetation%\" \"%volcanism%\" \"%temperature%\" \"%biome%\" \"%trees%\" \"%dirt%\" \"%mountains%\" %atmosphere% \"%mapName%\")"
+start /wait "" %gimpLocation% -d -f -i --verbose -b "(create-save-satellite \"%water%\" \"%elevation%\" \"%vegetation%\" \"%volcanism%\" \"%temperature%\" \"%biome%\" \"%trees%\" \"%dirt%\" \"%mountains%\" %atmosphere% \"%mapName%\")"
 
 echo Program completed.
 echo.

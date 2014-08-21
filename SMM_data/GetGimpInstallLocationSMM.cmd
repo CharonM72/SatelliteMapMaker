@@ -38,19 +38,19 @@ GOTO :TheEnd
 
 :: Scans the most common locations
 IF NOT %gimpVersion%!==! (
-	IF EXIST "%programfiles%\GIMP 2\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles%\GIMP ?\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles%\GIMP 2\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
-	IF EXIST "%programfiles% (x86)\GIMP 2\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles% (x86)\GIMP ?\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles% (x86)\GIMP 2\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
-	IF EXIST "%programfiles%\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles%\GIMP-?.?\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles%\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
-	IF EXIST "%programfiles% (x86)\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles% (x86)\GIMP-?.?\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles% (x86)\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)

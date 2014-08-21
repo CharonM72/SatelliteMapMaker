@@ -103,21 +103,21 @@
 		(gimp-context-set-background '(5 33 57)) ;set BG color to darker ocean color
 		;do the radial gradient
 		(gimp-blend oceans 
-              0 ;fg-bg-rgb mode
-              0 ;normal mode
-              2 ;gradient-radial
-              100 ; Opacity
-              0 ; Offset
-              0 ; REPEAT-NONE
-              FALSE ; Reverse
-              TRUE ; supersampling
-              3 ; recursion level for supersampling
-              0.2 ; supersampling threshold 
-              TRUE ;dither
-              center-x ; start at center
-              center-y 
-              width ; end on bottom-right corner
-              height)
+			0 ;fg-bg-rgb mode
+			0 ;normal mode
+			2 ;gradient-radial
+			100 ; Opacity
+			0 ; Offset
+			0 ; REPEAT-NONE
+			FALSE ; Reverse
+			TRUE ; supersampling
+			3 ; recursion level for supersampling
+			0.2 ; supersampling threshold 
+			TRUE ;dither
+			center-x ; start at center
+			center-y 
+			width ; end on bottom-right corner
+			height)
 		
 		;invert selection and remove land area from ocean layers
 		(gimp-selection-invert newRegion)
