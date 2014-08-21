@@ -9,7 +9,7 @@ SETLOCAL
 
 :: This script is released under the GPL3 to the extent that I (CharonM72) can do so.  It incorporates code written by PeridexisErrant, Parker147 and YukiHyou.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html
 
-echo Welcome to CharonM72's Dwarf Fortress Satellite Map Maker v1.3!
+echo Welcome to CharonM72's Dwarf Fortress Satellite Map Maker v1.3.1!
 echo.
 echo This program will load region map bmp's and use them to make a satellite
 echo imagery-style map.
