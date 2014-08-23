@@ -27,11 +27,11 @@ if "%UserGimpLocation%"=="" CALL :ScanForIt
 
 if "%LNPGimpLocation%"=="" (
 	echo %gimpLocation%
-	goto :TheEnd
+	goto :EOF
 )
 
 echo %LNPGimpLocation%!
-GOTO :TheEnd
+GOTO :EOF
 
 :ScanForIt
 
@@ -78,6 +78,3 @@ GOTO :EOF
 	:: Just a subroutine to avoid making typos on this every time.
 	for /f "usebackq tokens=*" %%w in (`dir /s /b %1 ^| findstr "\gimp-console-"`) do set LNPGimpLocation=%%w
 GOTO :EOF
-
-
-:TheEnd
