@@ -82,7 +82,7 @@ echo Found texture files.
 :: check for GIMP via the user folder
 IF NOT EXIST "%userprofile%\.gimp-*" goto gimp_not_found
 echo Searching for GIMP (this may take a minute)...
-for /f "usebackq tokens=*" %%f in (`dir /s /b "%userprofile%\.gimp-*"`) do (
+for /f "usebackq tokens=*" %%f in (`dir /b "%userprofile%\.gimp-*"`) do (
 	SET scriptFolder="%%f"
 )
 :: get rid of surrounding double quotes

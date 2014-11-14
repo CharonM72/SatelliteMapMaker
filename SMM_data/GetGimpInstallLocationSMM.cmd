@@ -27,30 +27,27 @@ if "%UserGimpLocation%"=="" CALL :ScanForIt
 
 if "%LNPGimpLocation%"=="" (
 	echo %gimpLocation%
-	goto :EOF
+	goto :TheEnd
 )
-
-echo %LNPGimpLocation%!
-GOTO :EOF
 
 :ScanForIt
 
 
 :: Scans the most common locations
 IF NOT %gimpVersion%!==! (
-	IF EXIST "%programfiles%\GIMP ?\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles%\GIMP %gimpVersion:~0,-2%\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles%\GIMP 2\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
-	IF EXIST "%programfiles% (x86)\GIMP ?\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles% (x86)\GIMP %gimpVersion:~0,-2%\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles% (x86)\GIMP 2\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
-	IF EXIST "%programfiles%\GIMP-?.?\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles%\GIMP-%gimpVersion%\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles%\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
-	IF EXIST "%programfiles% (x86)\GIMP-?.?\bin\gimp-console-%gimpVersion%.exe" (
+	IF EXIST "%programfiles% (x86)\GIMP-%gimpVersion%\bin\gimp-console-%gimpVersion%.exe" (
 		SET gimpLocation="%programfiles% (x86)\GIMP-2.0\bin\gimp-console-%gimpVersion%.exe"
 		GOTO :EOF
 		)
@@ -78,3 +75,6 @@ GOTO :EOF
 	:: Just a subroutine to avoid making typos on this every time.
 	for /f "usebackq tokens=*" %%w in (`dir /s /b %1 ^| findstr "\gimp-console-"`) do set LNPGimpLocation=%%w
 GOTO :EOF
+
+
+:TheEnd

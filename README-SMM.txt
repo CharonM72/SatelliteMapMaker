@@ -41,6 +41,14 @@ If you have any problems, please sumbit a bug on GitHub (link at top) and/or men
 VERSION HISTORY
 --------------
 
+2014-11-14 v1.3.2
+-Made finding GIMP near-instantaneous for most (if not all) machines
+
+2014-08-21 v1.3.1
+-Works with the new version of DF
+-Can now (hopefully) find versions of GIMP newer than 2.0
+-Other improvements
+
 2014-03-30 v1.3
 - Moved to GitHub
 - Moved extraneous files to SM_data folder for reduced clutter.
