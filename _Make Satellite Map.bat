@@ -83,8 +83,9 @@ echo Found texture files.
 IF NOT EXIST "%userprofile%\.gimp-*" goto gimp_not_found
 echo Searching for GIMP (this may take a minute)...
 for /f "usebackq tokens=*" %%f in (`dir /b "%userprofile%\.gimp-*"`) do (
-	SET scriptFolder="%%f"
+	SET scriptFolder="%userprofile%\%%f"
 )
+
 :: get rid of surrounding double quotes
 SET scriptFolder=%scriptFolder:~1,-1%
 :: retrieve GIMP version from folder name
@@ -109,7 +110,7 @@ if not exist "%~dp0\SMM_data\SatMapMaker.scm" (
 	if not exist "%scriptFolder%\scripts\SatMapMaker.scm" goto script_not_found
 	)
 echo Installing script (if necessary)...
-ROBOCOPY "%~dp0\SMM_data" "%scriptFolder%\scripts" "SatMapMaker.scm" /NFL /NDL /NJH /NJS /nc /ns /np
+ROBOCOPY "%~dp0\SMM_data" "%scriptFolder%\scripts" "SatMapMaker.scm" /NP /NS /NC /NFL /NDL /NJH /NJS
 echo Done.
 goto set_atmosphere
 
@@ -152,6 +153,7 @@ if %atmosphere% equ 1 (
 if %atmosphere% equ 0 (
 	goto use_SatMapMaker
 	)
+echo Not a number between 0 and 2.
 goto set_atmosphere
 
 :use_SatMapMaker

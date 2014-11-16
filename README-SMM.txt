@@ -32,7 +32,7 @@ Finally, in order for GIMP to be able to run the script, the SatMapMaker.scm fil
 To run the script, have the .bat, the six exported world maps, and the three texture files in the same folder (and the .scm file if it's not installed), and then just double-click the _Make Satellite Map.bat file. Follow the instructions on the command prompt. You can expect the GIMP processing to take less than a minute.
 The resulting realistic world map will be saved to the directory with all the other script files for your enjoyment.
 
-If you'd like, once the GIMP script is installed, you can run it through GIMP's UI. To do this, in GIMP click File -> Create -> Dwarf Map -> "Create realistic DF map...", then load the appropriate images. The result will be in editable layers.
+If you'd like, once the GIMP script is installed, you can run it through GIMP's UI. To do this, in GIMP click File -> Create -> Dwarf Map -> "Create satellite DF map...", then load the appropriate images. The result will be in editable layers.
 
 This script also supports installation to PeridexisErrant's Lazy Newb Pack as a utility.
 
@@ -40,6 +40,11 @@ If you have any problems, please sumbit a bug on GitHub (link at top) and/or men
 
 VERSION HISTORY
 --------------
+
+2014-11-16 v1.3.3
+- Fixed bug where script could not be run in GIMP's GUI
+- Fixed script not installing to GIMP
+- Minor changes
 
 2014-11-14 v1.3.2
 - Made finding GIMP near-instantaneous for most (if not all) machines

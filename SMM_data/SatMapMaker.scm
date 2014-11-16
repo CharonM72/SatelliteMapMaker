@@ -1,7 +1,7 @@
 (define (create-save-satellite waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere outputFile)
 (let * (
-	(newRegion (car (satellite-map-maker waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
-	)
+		(newRegion (car (satellite-map-maker waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
+		)
 	
 	(file-bmp-save 1 newRegion (car (gimp-image-flatten newRegion)) outputFile "")
 	(gimp-quit 1)
@@ -324,10 +324,10 @@
 	SF-STRING	"Volcanism File -vol-"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-vol-region1-555-5588.bmp"
 	SF-STRING	"Temperature File -tmp-"		"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-tmp-region1-555-5588.bmp"
 	SF-STRING	"Biome File -bm-"				"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-bm-region1-555-5588.bmp"
-	SF-STRING	"Trees Texture File"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\sat_trees.bmp"
-	SF-STRING	"Dirt Texture File"				"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\sat_dirt.bmp"
-	SF-STRING	"Mountains Texture File"		"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\sat_mountains.bmp"
-	SF-STRING	"Atmosphere level (0-2)"		"1"
+	SF-STRING	"Trees Texture File"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\SMM_data\\sat_trees.bmp"
+	SF-STRING	"Dirt Texture File"				"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\SMM_data\\sat_dirt.bmp"
+	SF-STRING	"Mountains Texture File"		"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\SMM_data\\sat_mountains.bmp"
+	SF-VALUE	"Atmosphere level (0-2)"		"1"
 )
 
 (script-fu-menu-register "create-view-satellite" "<Image>/File/Create/Dwarf Map")
