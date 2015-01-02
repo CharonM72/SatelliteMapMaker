@@ -5,6 +5,8 @@ SETLOCAL
 
 :: Creates a satellite imagery-like map of Dwarf Fortress worlds!
 
+:: Batch script for user-friendly setup of the GIMP Script-Fu script
+
 :: Written by CharonM72
 
 :: This script is released under the GPL3 to the extent that I (CharonM72) can do so.  It incorporates code written by PeridexisErrant, Parker147 and YukiHyou.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html

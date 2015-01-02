@@ -1,3 +1,16 @@
+;Satellite Map Maker
+
+;Creates a satellite imagery-like map of Dwarf Fortress worlds!
+
+;GIMP Script-fu script
+
+;Written by CharonM72
+
+;This script is released under the GPL3 to the extent that I (CharonM72) can do so.  It incorporates code written by PeridexisErrant, Parker147 and YukiHyou.  The GPL3 licence can be found at https://www.gnu.org/licenses/gpl.html
+
+
+;------------For running in batch mode-----------
+
 (define (create-save-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere outputFile)
 (let * (
 		(newRegion (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)))
@@ -8,14 +21,20 @@
 )
 )
 
+
+;-----------For running in UI mode---------------
+
 (define (create-view-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)
 	(gimp-display-new (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)))
 )
 
+
+;------------------Main program------------------
+
 (define (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)
 
 
-;-----------------Initialization--------------------
+;-----------------Initialization-----------------
 
 (let * (
 	;Set image files to images within GIMP, and define variables
@@ -61,10 +80,10 @@
 		(clouds (car (gimp-layer-new-from-visible rainImage newRegion "Clouds")))
 		(evil (car (gimp-layer-new-from-visible evilImage newRegion "Evil")))
 		;These will be based on the texture images
-		(dirt (car (gimp-layer-new newRegion 10 10 0 "Dirt" 100 21))) ;grain-merge mode
-		(trees (car (gimp-layer-new newRegion 10 10 0 "Trees" 100 14))) ;value mode
-		(mountains (car (gimp-layer-new newRegion 10 10 0 "Mountains" 100 19))) ;softlight mode
-		(sky (car (gimp-layer-new newRegion 10 10 0 "Sky" 100 0))) ;normal mode
+		(dirt (car (gimp-layer-new newRegion 10 10 0 "Dirt" 100 21)))			;grain-merge mode
+		(trees (car (gimp-layer-new newRegion 10 10 0 "Trees" 100 14)))			;value mode
+		(mountains (car (gimp-layer-new newRegion 10 10 0 "Mountains" 100 19)))	;softlight mode
+		(sky (car (gimp-layer-new newRegion 10 10 0 "Sky" 100 0)))				;normal mode
 		
 		;Create a few gradients
 		(elevationMap (car (gimp-gradient-new "Elevation Map")))
@@ -76,7 +95,7 @@
 		)
 		
 		
-		;------------------Setup Layers--------------------
+		;------------------Setup Layers-------------------
 		
 		(gimp-image-resize-to-layers newRegion)
 		;insert layers into image
@@ -116,20 +135,20 @@
 		(gimp-context-set-background '(5 33 57)) ;set BG color to darker ocean color
 		;do the radial gradient
 		(gimp-blend oceans 
-			0 ;fg-bg-rgb mode
-			0 ;normal mode
-			2 ;gradient-radial
-			100 ;Opacity
-			0 ;Offset
-			0 ;REPEAT-NONE
-			FALSE ;Reverse
-			TRUE ;supersampling
-			3 ;recursion level for supersampling
-			0.2 ;supersampling threshold 
-			TRUE ;dither
-			center-x ;start at center
+			0			;fg-bg-rgb mode
+			0			;normal mode
+			2			;gradient-radial
+			100			;Opacity
+			0			;Offset
+			0			;REPEAT-NONE
+			FALSE		;Reverse
+			TRUE		;supersampling
+			3			;recursion level for supersampling
+			0.2			;supersampling threshold 
+			TRUE		;dither
+			center-x	;start at center
 			center-y 
-			width ;end on bottom-right corner
+			width		;end on bottom-right corner
 			height)
 		
 		;invert selection and remove land area from ocean layers
@@ -184,13 +203,13 @@
 		(gimp-selection-none newRegion)
 		
 		;set layer modes
-		(gimp-layer-set-mode waterDepth 19) ;set to softlight mode
-		(gimp-layer-set-mode volcanism 13) ;set to color mode
-		(gimp-layer-set-mode temperature 19) ;set to softlight mode
-		(gimp-layer-set-mode iceCap 7) ;set to addition mode
+		(gimp-layer-set-mode waterDepth 19)	;set to softlight mode
+		(gimp-layer-set-mode volcanism 13)	;set to color mode
+		(gimp-layer-set-mode temperature 19);set to softlight mode
+		(gimp-layer-set-mode iceCap 7)		;set to addition mode
 		
 		
-		;---------------Apply Colors / Gradients to Layers---------------
+		;---------Apply Colors / Gradients to Layers------
 		
 		;Elevation Gradient Map
 		(gimp-gradient-segment-range-split-uniform elevationMap 0 0 4) 
@@ -202,14 +221,14 @@
 		(gimp-gradient-segment-set-right-pos elevationMap 2 0.69)
 		(gimp-gradient-segment-set-middle-pos elevationMap 3 0.88)
 		(gimp-gradient-segment-set-right-pos elevationMap 3 1.0)
-		(gimp-gradient-segment-set-left-color elevationMap 0 '(0 0 0) 100) ;black
-		(gimp-gradient-segment-set-right-color elevationMap 0 '(0 0 0) 100) ;black
-		(gimp-gradient-segment-set-left-color elevationMap 1 '(0 0 0) 100) ;black
-		(gimp-gradient-segment-set-right-color elevationMap 1 '(170 154 127) 100) ;gray-brown
-		(gimp-gradient-segment-set-left-color elevationMap 2 '(76 71 68) 100) ;dark gray
-		(gimp-gradient-segment-set-right-color elevationMap 2 '(133 124 114) 100) ;gray
-		(gimp-gradient-segment-set-left-color elevationMap 3 '(185 175 165) 100) ;light gray
-		(gimp-gradient-segment-set-right-color elevationMap 3 '(255 255 255) 100) ;white
+		(gimp-gradient-segment-set-left-color elevationMap 0 '(0 0 0) 100)			;black
+		(gimp-gradient-segment-set-right-color elevationMap 0 '(0 0 0) 100)			;black
+		(gimp-gradient-segment-set-left-color elevationMap 1 '(0 0 0) 100)			;black
+		(gimp-gradient-segment-set-right-color elevationMap 1 '(170 154 127) 100)	;gray-brown
+		(gimp-gradient-segment-set-left-color elevationMap 2 '(76 71 68) 100)		;dark gray
+		(gimp-gradient-segment-set-right-color elevationMap 2 '(133 124 114) 100)	;gray
+		(gimp-gradient-segment-set-left-color elevationMap 3 '(185 175 165) 100)	;light gray
+		(gimp-gradient-segment-set-right-color elevationMap 3 '(255 255 255) 100)	;white
 		(gimp-context-set-gradient elevationMap)
 		(plug-in-gradmap 0 newRegion elevation)
 		
@@ -256,10 +275,10 @@
 		(gimp-gradient-segment-set-middle-pos vegetationMap 0 0.379)
 		(gimp-gradient-segment-set-right-pos vegetationMap 0 0.658)
 		(gimp-gradient-segment-set-middle-pos vegetationMap 1 0.704)
-		(gimp-gradient-segment-set-left-color vegetationMap 0 '(0 0 0) 100) ;black
-		(gimp-gradient-segment-set-right-color vegetationMap 0 '(110 170 66) 100) ;light green
-		(gimp-gradient-segment-set-left-color vegetationMap 1 '(85 135 63) 100) ;green
-		(gimp-gradient-segment-set-right-color vegetationMap 1 '(60 108 39) 100) ;dark green
+		(gimp-gradient-segment-set-left-color vegetationMap 0 '(0 0 0) 100)			;black
+		(gimp-gradient-segment-set-right-color vegetationMap 0 '(110 170 66) 100)	;light green
+		(gimp-gradient-segment-set-left-color vegetationMap 1 '(85 135 63) 100)		;green
+		(gimp-gradient-segment-set-right-color vegetationMap 1 '(60 108 39) 100)	;dark green
 		(gimp-context-set-gradient vegetationMap)
 		(plug-in-gradmap 0 newRegion vegetation)
 		
@@ -280,12 +299,12 @@
 		(gimp-gradient-segment-set-right-pos temperatureMap 0 0.40)
 		(gimp-gradient-segment-set-right-pos temperatureMap 1 0.60)
 		(gimp-gradient-segment-set-middle-pos temperatureMap 2 0.70)
-		(gimp-gradient-segment-set-left-color temperatureMap 0 '(30 25 100) 100) ;bluish
-		(gimp-gradient-segment-set-right-color temperatureMap 0 '(127 127 127) 100) ;gray
-		(gimp-gradient-segment-set-left-color temperatureMap 1 '(127 127 127) 100) ;gray
-		(gimp-gradient-segment-set-right-color temperatureMap 1 '(127 127 127) 100) ;gray
-		(gimp-gradient-segment-set-left-color temperatureMap 2 '(127 127 127) 100) ;gray
-		(gimp-gradient-segment-set-right-color temperatureMap 2 '(220 176 76) 100) ;orange
+		(gimp-gradient-segment-set-left-color temperatureMap 0 '(30 25 100) 100)	;bluish
+		(gimp-gradient-segment-set-right-color temperatureMap 0 '(127 127 127) 100)	;gray
+		(gimp-gradient-segment-set-left-color temperatureMap 1 '(127 127 127) 100)	;gray
+		(gimp-gradient-segment-set-right-color temperatureMap 1 '(127 127 127) 100)	;gray
+		(gimp-gradient-segment-set-left-color temperatureMap 2 '(127 127 127) 100)	;gray
+		(gimp-gradient-segment-set-right-color temperatureMap 2 '(220 176 76) 100)	;orange
 		;old: 255 226 122
 		(gimp-context-set-gradient temperatureMap)
 		(plug-in-gradmap 0 newRegion temperature)
@@ -336,7 +355,7 @@
 )
 
 
-;---------Register the script with script-fu----------
+;-------Register the script with script-fu-------
 
 (script-fu-register
 	"create-view-satellite"
@@ -352,7 +371,7 @@
 	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
 	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
 	SF-STRING	"Biome File -bm-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
-	SF-STRING	"Structures File -str-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-str.bmp"
+	SF-STRING	"Structures File -str-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-str.bmp"
 	SF-STRING	"Rain File -rain-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-rain.bmp"
 	SF-STRING	"Evil File -evil-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-evil.bmp"
 	SF-STRING	"Trees Texture File"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
