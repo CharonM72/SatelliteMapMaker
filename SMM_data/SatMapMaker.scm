@@ -1,6 +1,6 @@
-(define (create-save-satellite waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere outputFile)
+(define (create-save-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere outputFile)
 (let * (
-		(newRegion (car (satellite-map-maker waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
+		(newRegion (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
 		)
 	
 	(file-bmp-save 1 newRegion (car (gimp-image-flatten newRegion)) outputFile "")
@@ -8,16 +8,16 @@
 )
 )
 
-(define (create-view-satellite waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)
-	(gimp-display-new (car (satellite-map-maker waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
+(define (create-view-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)
+	(gimp-display-new (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
 )
 
-(define (satellite-map-maker waterFile elevationFile vegatationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)
+(define (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)
 (let * (
 	; Set image files to images within GIMP, and define variables
 	(waterImage ( car (file-bmp-load 0 waterFile "")))
 	(elevationImage ( car (file-bmp-load 0 elevationFile "")))
-	(vegatationImage ( car (file-bmp-load 0 vegatationFile "")))
+	(vegetationImage ( car (file-bmp-load 0 vegetationFile "")))
 	(volcanismImage ( car (file-bmp-load 0 volcanismFile "")))
 	(temperatureImage ( car (file-bmp-load 0 temperatureFile "")))
 	(biomeImage (car (file-bmp-load 0 biomeFile "")))
@@ -44,7 +44,7 @@
 		(oceans (car (gimp-layer-new-from-visible waterImage newRegion "Oceans")))
 		(rivers (car (gimp-layer-new-from-visible waterImage newRegion "Rivers")))
 		(waterDepth (car (gimp-layer-new-from-visible elevationImage newRegion "Ocean Depth")))
-		(vegatation (car (gimp-layer-new-from-visible vegatationImage newRegion "Vegatation")))
+		(vegetation (car (gimp-layer-new-from-visible vegetationImage newRegion "Vegetation")))
 		(biome (car (gimp-layer-new-from-visible biomeImage newRegion "Biome")))
 		(volcanism (car (gimp-layer-new-from-visible volcanismImage newRegion "Volcanism")))
 		(temperature (car (gimp-layer-new-from-visible temperatureImage newRegion "Temperature")))
@@ -53,12 +53,12 @@
 		(dirt (car (gimp-layer-new newRegion 10 10 0 "Dirt" 100 0)))
 		(trees (car (gimp-layer-new newRegion 10 10 0 "Trees" 100 0)))
 		(mountains (car (gimp-layer-new newRegion 10 10 0 "Mountains" 100 0)))
-		(sky (car (gimp-layer-new newRegion 10 10 0 "sky" 100 0)))
+		(sky (car (gimp-layer-new newRegion 10 10 0 "Sky" 100 0)))
 		
 		; Create a few gradients
 		(elevationMap (car (gimp-gradient-new "Elevation Map")))
 		(riverMap (car (gimp-gradient-new "River Map")))
-		(vegatationMap (car (gimp-gradient-new "Vegatation Map")))
+		(vegetationMap (car (gimp-gradient-new "Vegetation Map")))
 		(temperatureMap(car (gimp-gradient-new "Temperature Map")))
 		(iceCapMap(car (gimp-gradient-new "Ice Cap Map")))
 		(visible 0)
@@ -74,7 +74,7 @@
 		(gimp-image-add-layer newRegion mountainElevation 0)
 		(gimp-image-add-layer newRegion dirt 0)
 		(gimp-image-add-layer newRegion mountains 0)
-		(gimp-image-add-layer newRegion vegatation 0)
+		(gimp-image-add-layer newRegion vegetation 0)
 		(gimp-image-add-layer newRegion rivers 0)
 		(gimp-image-add-layer newRegion trees 0)
 		(gimp-image-add-layer newRegion volcanism 0)
@@ -88,7 +88,7 @@
 		(gimp-edit-clear dirt)
 		(gimp-layer-resize-to-image-size mountains)
 		(gimp-layer-add-alpha mountains)
-		(gimp-edit-clear mountains)	
+		(gimp-edit-clear mountains)
 		(gimp-layer-resize-to-image-size sky)
 		(gimp-layer-add-alpha sky)
 		
@@ -125,7 +125,7 @@
 		(gimp-edit-cut waterDepth)
 		
 		;fill in land with dirt pattern
-		(gimp-selection-all dirtImage) 
+		(gimp-selection-all dirtImage)
 		(gimp-edit-copy-visible dirtImage)
 		(gimp-context-set-pattern (list-ref (cadr (gimp-patterns-get-list "")) 0)) 
 		(gimp-bucket-fill dirt 2 0 100 255 0 0 0) ;fill the dirt layer with dirt pattern
@@ -134,9 +134,11 @@
 		
 		;make mountains
 		(gimp-selection-none newRegion)
-		(gimp-by-color-select biome '(128 128 128) 0 0 0 0 0 0) ;select mountains
-		(gimp-edit-cut dirt) ;remove mountain biome from layers
-		(gimp-edit-cut temperature)
+		(gimp-by-color-select biome '(128 128 128) 0 0 1 0 0 0) ;select mountains in biome layer
+		(gimp-selection-grow newRegion 2)
+		(gimp-selection-feather newRegion 3) ;make mountain edges smoother
+		(gimp-edit-cut dirt) ;remove mountain biome from dirt layer
+		(gimp-edit-cut temperature) ;remove mountain biome from temperature layer
 		;fill mountain biome with mountain pattern
 		(gimp-selection-all mountainsImage)
 		(gimp-edit-copy-visible mountainsImage)
@@ -144,14 +146,13 @@
 		(gimp-bucket-fill mountains 2 0 75 255 0 0 0) ;fill mountain layer with mountain pattern
 		(gimp-layer-set-mode mountains 19) ;set mode to softlight
 		(gimp-selection-invert newRegion) ;setup another mountain biome layer for elevation
-		(gimp-edit-clear mountainElevation)
+		(gimp-edit-clear mountainElevation) ;deletes everything in mountain elevation outside the mountains
 		
 		;setup tree layer
 		(gimp-selection-none newRegion)
 		(gimp-layer-resize-to-image-size trees) 
 		(gimp-layer-add-alpha trees)
-		(gimp-edit-clear trees)	
-		
+		(gimp-edit-clear trees)
 		
 		;remove ice cap from tree fill
 		(gimp-selection-none newRegion)
@@ -163,7 +164,7 @@
 		(gimp-desaturate waterDepth)
 		(gimp-layer-set-opacity waterDepth 80) ;reduces opacity
 		(gimp-layer-set-mode waterDepth 19) ;set mode to softlight
-		(gimp-levels waterDepth 0 25 255 1.0 0 255) ;change levels so only coastlines appear
+		(gimp-levels waterDepth 0 25 140 1.10 10 255) ;change levels so only coastlines appear
 		
 		;make sky
 		(gimp-layer-set-opacity sky (/ atmosphere 0.05))
@@ -203,10 +204,10 @@
 		
 		;Mountain Elevation Gradient Map
 		;Minor changes to the elevation map so that it fills out the mountain biome completely
-		(gimp-gradient-segment-set-right-pos elevationMap 1 0.45)
+		(gimp-gradient-segment-set-right-pos elevationMap 1 0.40)
 		(plug-in-gradmap 0 newRegion mountainElevation)
 		
-		 ;River Gradient Map
+		;River Gradient Map
 		(gimp-selection-none newRegion)
 		(gimp-by-color-select rivers '(0 127 127) 70 0 0 0 0 0)
 		(gimp-selection-invert newRegion)
@@ -218,34 +219,43 @@
 		(plug-in-gradmap 0 newRegion rivers)
 		(gimp-layer-set-opacity rivers 30) ;make rivers much less visible; they're kinda ugly
 		
-		;Gradient Map vegatation so it is transparent in low vegatation areas
-		(gimp-gradient-segment-set-middle-pos vegatationMap 0 0.33) 
-		(gimp-gradient-segment-set-left-color vegatationMap 0 '(0 0 0) 0) ;black
-		(gimp-gradient-segment-set-right-color vegatationMap 0 '(255 255 255) 100) ;white
-		(gimp-context-set-gradient vegatationMap)
-		(plug-in-gradmap 0 newRegion vegatation)
-		(gimp-selection-layer-alpha vegatation) ;fill in trees from the alpha selection
+		;Gauss blur vegetation to make the edges much less sharp
+		(gimp-selection-layer-alpha mountainElevation)
+		(gimp-selection-grow newRegion 1)
+		(plug-in-gauss 1 newRegion vegetation 2 2 0) ;blur edges by mountains slightly
+		(gimp-selection-invert newRegion)
+		(plug-in-gauss 1 newRegion vegetation 4 4 0) ;blur inside vegetation more
+		(gimp-selection-none newRegion)
+		
+		;Gradient Map vegetation so it is more translucent in lower vegetation areas, then create trees layer based on alpha gradient
+		(gimp-gradient-segment-set-middle-pos vegetationMap 0 0.33) 
+		(gimp-gradient-segment-set-left-color vegetationMap 0 '(0 0 0) 0) ;black (transparent)
+		(gimp-gradient-segment-set-right-color vegetationMap 0 '(255 255 255) 100) ;white (opaque)
+		(gimp-context-set-gradient vegetationMap)
+		(plug-in-gradmap 0 newRegion vegetation)
+		(gimp-selection-layer-alpha vegetation) ;select the part of the veg layer that has >0 opacity
 		(gimp-selection-all treesImage)
 		(gimp-edit-copy-visible treesImage)
-		(gimp-context-set-pattern (list-ref (cadr (gimp-patterns-get-list "")) 0)) 
+		(gimp-context-set-pattern (list-ref (cadr (gimp-patterns-get-list "")) 0))
 		(gimp-bucket-fill trees 2 0 100 255 0 0 0) ;add the trees!
 
-		;Gradient Map Vegatation
+		;Gradient Map vegetation
 		(gimp-selection-none newRegion)
-		(gimp-gradient-segment-range-split-midpoint vegatationMap 0 0) 
-		(gimp-gradient-segment-set-middle-pos vegatationMap 0 0.379)
-		(gimp-gradient-segment-set-right-pos vegatationMap 0 0.658)
-		(gimp-gradient-segment-set-middle-pos vegatationMap 1 0.704)
-		(gimp-gradient-segment-set-left-color vegatationMap 0 '(0 0 0) 100) ;black
-		(gimp-gradient-segment-set-right-color vegatationMap 0 '(110 170 66) 100) ;light green
-		(gimp-gradient-segment-set-left-color vegatationMap 1 '(85 135 63) 100) ;green
-		(gimp-gradient-segment-set-right-color vegatationMap 1 '(60 108 39) 100) ;dark green
-		(gimp-context-set-gradient vegatationMap)
-		(plug-in-gradmap 0 newRegion vegatation)
+		(gimp-gradient-segment-range-split-midpoint vegetationMap 0 0)
+		(gimp-gradient-segment-set-middle-pos vegetationMap 0 0.379)
+		(gimp-gradient-segment-set-right-pos vegetationMap 0 0.658)
+		(gimp-gradient-segment-set-middle-pos vegetationMap 1 0.704)
+		(gimp-gradient-segment-set-left-color vegetationMap 0 '(0 0 0) 100) ;black
+		(gimp-gradient-segment-set-right-color vegetationMap 0 '(110 170 66) 100) ;light green
+		(gimp-gradient-segment-set-left-color vegetationMap 1 '(85 135 63) 100) ;green
+		(gimp-gradient-segment-set-right-color vegetationMap 1 '(60 108 39) 100) ;dark green
+		(gimp-context-set-gradient vegetationMap)
+		(plug-in-gradmap 0 newRegion vegetation)
 		
 		;Remove low volcanism areas so it doesn't effect the entire map (volcanism is the gray areas)
 		(gimp-layer-add-alpha volcanism)
-		(gimp-by-color-select volcanism '(255 255 255) 140 0 1 0 0 0) ;antialias for the nice smooth grays
+		(gimp-by-color-select volcanism '(0 0 0) 185 0 1 0 0 0)
+		;note: high volcanism is represented by white in the exported map. learned that the hard way
 		(gimp-edit-clear volcanism)
 		(gimp-selection-none newRegion)
 		(gimp-context-set-foreground '(0 0 0))
@@ -264,7 +274,8 @@
 		(gimp-gradient-segment-set-left-color temperatureMap 1 '(127 127 127) 100) ;gray
 		(gimp-gradient-segment-set-right-color temperatureMap 1 '(127 127 127) 100) ;gray
 		(gimp-gradient-segment-set-left-color temperatureMap 2 '(127 127 127) 100) ;gray
-		(gimp-gradient-segment-set-right-color temperatureMap 2 '(255 226 122) 100) ;orange
+		(gimp-gradient-segment-set-right-color temperatureMap 2 '(220 176 76) 100) ;orange
+		;old: 255 226 122
 		(gimp-context-set-gradient temperatureMap)
 		(plug-in-gradmap 0 newRegion temperature)
 		(gimp-levels temperature 0 30 225 1.0 0 255) ; make temperature more visible
@@ -277,6 +288,10 @@
 		(gimp-context-set-gradient iceCapMap)
 		(plug-in-gradmap 0 newRegion iceCap)
 		(gimp-invert iceCap)
+		(gimp-selection-layer-alpha iceCap)
+		(gimp-selection-shrink newRegion 1)
+		(plug-in-gauss 1 newRegion iceCap 3 3 0) ;blur ice cap
+		(gimp-selection-none newRegion)
 		(gimp-levels iceCap 0 0 200 1.0 100 255) ;make ice cap brighter
 		
 		
@@ -288,10 +303,10 @@
 		
 		;----------------Clean up---------------------
 		
-		(gimp-image-remove-layer newRegion biome)
+		;(gimp-image-remove-layer newRegion biome)
 		(gimp-image-delete waterImage)
 		(gimp-image-delete elevationImage)
-		(gimp-image-delete vegatationImage)
+		(gimp-image-delete vegetationImage)
 		(gimp-image-delete biomeImage)
 		(gimp-image-delete volcanismImage)
 		(gimp-image-delete temperatureImage)
@@ -299,7 +314,7 @@
 		(gimp-image-delete dirtImage)
 		(gimp-image-delete mountainsImage)
 		(gimp-gradient-delete elevationMap)
-		(gimp-gradient-delete vegatationMap)
+		(gimp-gradient-delete vegetationMap)
 		(gimp-gradient-delete riverMap)
 		(gimp-gradient-delete temperatureMap)
 		(gimp-gradient-delete iceCapMap)
@@ -318,15 +333,15 @@
 	""				;copyright notice
 	"May 9, 2011"	;date created
 	""				;
-	SF-STRING	"Elevation Water File -elw-"	"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-elw-region1-555-5588.bmp"
-	SF-STRING	"Elevation File -el-"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-el-region1-555-5588.bmp"
-	SF-STRING	"Vegatation File -veg-"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-veg-region1-555-5588.bmp"
-	SF-STRING	"Volcanism File -vol-"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-vol-region1-555-5588.bmp"
-	SF-STRING	"Temperature File -tmp-"		"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-tmp-region1-555-5588.bmp"
-	SF-STRING	"Biome File -bm-"				"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\world_graphic-bm-region1-555-5588.bmp"
-	SF-STRING	"Trees Texture File"			"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\SMM_data\\sat_trees.bmp"
-	SF-STRING	"Dirt Texture File"				"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\SMM_data\\sat_dirt.bmp"
-	SF-STRING	"Mountains Texture File"		"C:\\Program Files (x86)\\Dwarf Fortress\\PeridexisErrant LNP r48\\Dwarf Fortress 0.34.11\\SMM_data\\sat_mountains.bmp"
+	SF-STRING	"Elevation Water File -elw-"	"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-elw.bmp"
+	SF-STRING	"Elevation File -el-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-el.bmp"
+	SF-STRING	"Vegetation File -veg-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-veg.bmp"
+	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
+	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
+	SF-STRING	"Biome File -bm-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
+	SF-STRING	"Trees Texture File"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
+	SF-STRING	"Dirt Texture File"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_dirt.bmp"
+	SF-STRING	"Mountains Texture File"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_mountains.bmp"
 	SF-VALUE	"Atmosphere level (0-2)"		"1"
 )
 

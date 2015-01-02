@@ -15,7 +15,7 @@ echo This program will load region map bmp's and use them to make a satellite
 echo imagery-style map.
 echo.
 echo For all parts of this script to work, you need to export all 'd'etailed maps
-echo (hotkey 'a' for all) from Legends mode.
+echo from Legends mode. DFHack may simplify this, if you have it.
 echo.
 echo They must be in the same directory as this bat file, in their original names.
 echo.
@@ -31,7 +31,7 @@ IF NOT EXIST "%CD%\Dwarf Fortress.exe" IF EXIST "%CD%\..\..\..\Dwarf Fortress 0.
 :find_region
 
 
-:: set region ID, to use in rest of script, works for 1-99 inclusive, if site maps only sets "unknown region"
+:: set region ID, to use in rest of script, works for 1-99 inclusive, if site maps only sets "unknown region" (old versions of DF)
 FOR /L %%G IN (999,-1,1) DO (
 	IF EXIST "%~dp0\*region%%G*"  (
 		set "region#=region%%G"
@@ -65,6 +65,7 @@ goto end
 
 :find_gimp
 
+
 echo Processing map exports from %region#%.
 :: check if the maps used by the GIMP script are present
 if not exist "%~dp0\*-elw*.bmp" goto maps_not_found
@@ -73,6 +74,9 @@ if not exist "%~dp0\*-veg*.bmp" goto maps_not_found
 if not exist "%~dp0\*-vol*.bmp" goto maps_not_found
 if not exist "%~dp0\*-tmp*.bmp" goto maps_not_found
 if not exist "%~dp0\*-bm*.bmp" goto maps_not_found
+if not exist "%~dp0\*-str*.bmp" goto maps_not_found
+if not exist "%~dp0\*-rain*.bmp" goto maps_not_found
+if not exist "%~dp0\*-evil*.bmp" goto maps_not_found
 echo Found map images.
 if not exist "%~dp0\SMM_data\sat_trees.bmp" goto textures_not_found
 if not exist "%~dp0\SMM_data\sat_mountains.bmp" goto textures_not_found
@@ -131,7 +135,7 @@ echo GIMP was not found on this computer.
 echo.
 echo This may occur if using a version higher or lower than GIMP 2.
 echo.
-echo It also may occur if you've never run GIMP before
+echo It also may occur if you've never run GIMP before.
 echo.
 echo Please install GIMP, and run it at least once.
 echo.
@@ -161,7 +165,7 @@ goto set_atmosphere
 
 echo Atmosphere set to %atmosphere%.
 :: The following is taken from the DwarfMapMaker script, by Parker147.  It relies on the GIMP script he wrote, with modifications.  
-set "mapName=SatMapMaker-%region#%.bmp"
+set "mapName=%region#%-SatMapMaker.bmp"
 
 for %%i in (*-elw*) do set water=%%~fi
 for %%i in (*-el*)  do set elevation=%%~fi
@@ -169,6 +173,9 @@ for %%i in (*-veg*) do set vegetation=%%~fi
 for %%i in (*-vol*) do set volcanism=%%~fi
 for %%i in (*-tmp*) do set temperature=%%~fi
 for %%i in (*-bm*)  do set biome=%%~fi
+for %%i in (*-str*)  do set structures=%%~fi
+for %%i in (*-rain*)  do set rain=%%~fi
+for %%i in (*-evil*)  do set evil=%%~fi
 for %%i in (SMM_data\sat_mountains.bmp)  do set mountains=%%~fi
 for %%i in (SMM_data\sat_trees.bmp)  do set trees=%%~fi
 for %%i in (SMM_data\sat_dirt.bmp)  do set dirt=%%~fi
@@ -179,14 +186,17 @@ set vegetation=%vegetation:\=\\%
 set volcanism=%volcanism:\=\\%
 set temperature=%temperature:\=\\%
 set biome=%biome:\=\\%
+set structures=%structures:\=\\%
+set rain=%rain:\=\\%
+set evil=%evil:\=\\%
+set mountains=%mountains:\=\\%
 set trees=%trees:\=\\%
 set dirt=%dirt:\=\\%
-set mountains=%mountains:\=\\%
 set outputFile=%outputFile:\=\\%
 
 echo Running GIMP (should take less than a minute)...
 
-start /wait "" %gimpLocation% -d -f -i --verbose -b "(create-save-satellite \"%water%\" \"%elevation%\" \"%vegetation%\" \"%volcanism%\" \"%temperature%\" \"%biome%\" \"%trees%\" \"%dirt%\" \"%mountains%\" %atmosphere% \"%mapName%\")"
+start /wait "" %gimpLocation% --verbose --no-data --no-fonts --no-interface -b "(create-save-satellite \"%water%\" \"%elevation%\" \"%vegetation%\" \"%volcanism%\" \"%temperature%\" \"%biome%\" \"%structures%\" \"%rain%\" \"%evil%\" \"%trees%\" \"%dirt%\" \"%mountains%\" %atmosphere% \"%mapName%\")"
 
 echo Program completed.
 echo.
