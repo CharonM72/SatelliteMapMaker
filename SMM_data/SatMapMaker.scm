@@ -1,6 +1,6 @@
-(define (create-save-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere outputFile)
+(define (create-save-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere outputFile)
 (let * (
-		(newRegion (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
+		(newRegion (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)))
 		)
 	
 	(file-bmp-save 1 newRegion (car (gimp-image-flatten newRegion)) outputFile "")
@@ -8,19 +8,22 @@
 )
 )
 
-(define (create-view-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)
-	(gimp-display-new (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)))
+(define (create-view-satellite waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)
+	(gimp-display-new (car (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)))
 )
 
-(define (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile treesFile dirtFile mountainsFile atmosphere)
+(define (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)
 (let * (
-	; Set image files to images within GIMP, and define variables
+	;Set image files to images within GIMP, and define variables
 	(waterImage ( car (file-bmp-load 0 waterFile "")))
 	(elevationImage ( car (file-bmp-load 0 elevationFile "")))
 	(vegetationImage ( car (file-bmp-load 0 vegetationFile "")))
 	(volcanismImage ( car (file-bmp-load 0 volcanismFile "")))
 	(temperatureImage ( car (file-bmp-load 0 temperatureFile "")))
 	(biomeImage (car (file-bmp-load 0 biomeFile "")))
+	(structuresImage (car (file-bmp-load 0 structuresFile "")))
+	(rainImage (car (file-bmp-load 0 rainFile "")))
+	(evilImage (car (file-bmp-load 0 evilFile "")))
 	(treesImage (car (file-bmp-load 0 treesFile "")))
 	(dirtImage (car (file-bmp-load 0 dirtFile "")))
 	(mountainsImage (car (file-bmp-load 0 mountainsFile "")))
@@ -30,7 +33,7 @@
 	(center-x 0)
 	(center-y 0)
 	)
-	; Set image dimensions based on water file
+	;Set image dimensions based on water file
 	(set! width (car (gimp-image-width waterImage)))
 	(set! height (car (gimp-image-height waterImage)))
 	(gimp-image-resize newRegion width height 0 0)
@@ -38,7 +41,7 @@
 	(set! center-y (/ height 2))
 	
 	(let * (
-		; Create new layers from each of the loaded images (sometimes multiple layers)
+		;Create new layers from each of the loaded images (sometimes multiple layers)
 		(elevation (car (gimp-layer-new-from-visible elevationImage newRegion "Elevation")))
 		(mountainElevation (car (gimp-layer-new-from-visible elevationImage newRegion "Mountain Elevation")))
 		(oceans (car (gimp-layer-new-from-visible waterImage newRegion "Oceans")))
@@ -49,13 +52,17 @@
 		(volcanism (car (gimp-layer-new-from-visible volcanismImage newRegion "Volcanism")))
 		(temperature (car (gimp-layer-new-from-visible temperatureImage newRegion "Temperature")))
 		(iceCap (car (gimp-layer-new-from-visible temperatureImage newRegion "Ice Cap")))
-		; These will be based on the texture images
-		(dirt (car (gimp-layer-new newRegion 10 10 0 "Dirt" 100 0)))
-		(trees (car (gimp-layer-new newRegion 10 10 0 "Trees" 100 0)))
-		(mountains (car (gimp-layer-new newRegion 10 10 0 "Mountains" 100 0)))
-		(sky (car (gimp-layer-new newRegion 10 10 0 "Sky" 100 0)))
+		(towns (car (gimp-layer-new-from-visible structuresImage newRegion "Towns")))
+		(roads (car (gimp-layer-new-from-visible structuresImage newRegion "Roads")))
+		(clouds (car (gimp-layer-new-from-visible rainImage newRegion "Clouds")))
+		(evil (car (gimp-layer-new-from-visible evilImage newRegion "Evil")))
+		;These will be based on the texture images
+		(dirt (car (gimp-layer-new newRegion 10 10 0 "Dirt" 100 21))) ;grain-merge mode
+		(trees (car (gimp-layer-new newRegion 10 10 0 "Trees" 100 14))) ;value mode
+		(mountains (car (gimp-layer-new newRegion 10 10 0 "Mountains" 100 19))) ;softlight mode
+		(sky (car (gimp-layer-new newRegion 10 10 0 "Sky" 100 0))) ;normal mode
 		
-		; Create a few gradients
+		;Create a few gradients
 		(elevationMap (car (gimp-gradient-new "Elevation Map")))
 		(riverMap (car (gimp-gradient-new "River Map")))
 		(vegetationMap (car (gimp-gradient-new "Vegetation Map")))
@@ -66,7 +73,7 @@
 
 		;---------------Setup Layers-----------------
 		(gimp-image-resize-to-layers newRegion)
-		;order layers
+		;insert layers into image
 		(gimp-image-add-layer newRegion biome 0)
 		(gimp-image-add-layer newRegion oceans 0)
 		(gimp-image-add-layer newRegion waterDepth 0)
@@ -106,17 +113,17 @@
 			0 ;fg-bg-rgb mode
 			0 ;normal mode
 			2 ;gradient-radial
-			100 ; Opacity
-			0 ; Offset
-			0 ; REPEAT-NONE
-			FALSE ; Reverse
-			TRUE ; supersampling
-			3 ; recursion level for supersampling
-			0.2 ; supersampling threshold 
+			100 ;Opacity
+			0 ;Offset
+			0 ;REPEAT-NONE
+			FALSE ;Reverse
+			TRUE ;supersampling
+			3 ;recursion level for supersampling
+			0.2 ;supersampling threshold 
 			TRUE ;dither
-			center-x ; start at center
+			center-x ;start at center
 			center-y 
-			width ; end on bottom-right corner
+			width ;end on bottom-right corner
 			height)
 		
 		;invert selection and remove land area from ocean layers
@@ -129,7 +136,6 @@
 		(gimp-edit-copy-visible dirtImage)
 		(gimp-context-set-pattern (list-ref (cadr (gimp-patterns-get-list "")) 0)) 
 		(gimp-bucket-fill dirt 2 0 100 255 0 0 0) ;fill the dirt layer with dirt pattern
-		(gimp-layer-set-mode dirt 21) ;set dirt layer to grain-merge
 		(gimp-levels dirt 1 0 255 1.0 25 255) ;increase minimum output level, decreasing the sharpness of dark areas
 		
 		;make mountains
@@ -144,7 +150,6 @@
 		(gimp-edit-copy-visible mountainsImage)
 		(gimp-context-set-pattern (list-ref (cadr (gimp-patterns-get-list "")) 0)) 
 		(gimp-bucket-fill mountains 2 0 75 255 0 0 0) ;fill mountain layer with mountain pattern
-		(gimp-layer-set-mode mountains 19) ;set mode to softlight
 		(gimp-selection-invert newRegion) ;setup another mountain biome layer for elevation
 		(gimp-edit-clear mountainElevation) ;deletes everything in mountain elevation outside the mountains
 		
@@ -163,7 +168,6 @@
 		;make water depth
 		(gimp-desaturate waterDepth)
 		(gimp-layer-set-opacity waterDepth 80) ;reduces opacity
-		(gimp-layer-set-mode waterDepth 19) ;set mode to softlight
 		(gimp-levels waterDepth 0 25 140 1.10 10 255) ;change levels so only coastlines appear
 		
 		;make sky
@@ -174,6 +178,7 @@
 		(gimp-selection-none newRegion)
 		
 		;set layer modes
+		(gimp-layer-set-mode waterDepth 19) ;set to softlight mode
 		(gimp-layer-set-mode volcanism 13) ;set to color mode
 		(gimp-layer-set-mode temperature 19) ;set to softlight mode
 		(gimp-layer-set-mode iceCap 7) ;set to addition mode
@@ -217,7 +222,7 @@
 		(gimp-gradient-segment-set-right-color riverMap 0 '(11 43 78) 100) ;dark blue 
 		(gimp-context-set-gradient riverMap)
 		(plug-in-gradmap 0 newRegion rivers)
-		(gimp-layer-set-opacity rivers 30) ;make rivers much less visible; they're kinda ugly
+		(gimp-layer-set-opacity rivers 30) ;make rivers much less visible, they're kinda ugly
 		
 		;Gauss blur vegetation to make the edges much less sharp
 		(gimp-selection-layer-alpha mountainElevation)
@@ -278,7 +283,7 @@
 		;old: 255 226 122
 		(gimp-context-set-gradient temperatureMap)
 		(plug-in-gradmap 0 newRegion temperature)
-		(gimp-levels temperature 0 30 225 1.0 0 255) ; make temperature more visible
+		(gimp-levels temperature 0 30 225 1.0 0 255) ;make temperature more visible
 		
 		
 		;Gradient Map Ice Cap
@@ -333,15 +338,18 @@
 	""				;copyright notice
 	"May 9, 2011"	;date created
 	""				;
-	SF-STRING	"Elevation Water File -elw-"	"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-elw.bmp"
-	SF-STRING	"Elevation File -el-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-el.bmp"
-	SF-STRING	"Vegetation File -veg-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-veg.bmp"
-	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
-	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
-	SF-STRING	"Biome File -bm-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
-	SF-STRING	"Trees Texture File"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
-	SF-STRING	"Dirt Texture File"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_dirt.bmp"
-	SF-STRING	"Mountains Texture File"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_mountains.bmp"
+	SF-STRING	"Elevation Water File -elw-"	"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-elw.bmp"
+	SF-STRING	"Elevation File -el-"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-el.bmp"
+	SF-STRING	"Vegetation File -veg-"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-veg.bmp"
+	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
+	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
+	SF-STRING	"Biome File -bm-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
+	SF-STRING	"Structures File -str-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-str.bmp"
+	SF-STRING	"Rain File -rain-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-rain.bmp"
+	SF-STRING	"Evil File -evil-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-evil.bmp"
+	SF-STRING	"Trees Texture File"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
+	SF-STRING	"Dirt Texture File"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_dirt.bmp"
+	SF-STRING	"Mountains Texture File"		"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_mountains.bmp"
 	SF-VALUE	"Atmosphere level (0-2)"		"1"
 )
 
