@@ -13,6 +13,10 @@
 )
 
 (define (satellite-map-maker waterFile elevationFile vegetationFile volcanismFile temperatureFile biomeFile structuresFile rainFile evilFile treesFile dirtFile mountainsFile atmosphere)
+
+
+;-----------------Initialization--------------------
+
 (let * (
 	;Set image files to images within GIMP, and define variables
 	(waterImage ( car (file-bmp-load 0 waterFile "")))
@@ -70,8 +74,10 @@
 		(iceCapMap(car (gimp-gradient-new "Ice Cap Map")))
 		(visible 0)
 		)
-
-		;---------------Setup Layers-----------------
+		
+		
+		;------------------Setup Layers--------------------
+		
 		(gimp-image-resize-to-layers newRegion)
 		;insert layers into image
 		(gimp-image-add-layer newRegion biome 0)
@@ -306,7 +312,7 @@
 		(gimp-levels visible 0 5 220 1.1 0 255)
 		;(plug-in-blur 0 0 visible) ;blur the map to reduce sharp edges (off)
 		
-		;----------------Clean up---------------------
+		;------------------Clean up-----------------------
 		
 		;(gimp-image-remove-layer newRegion biome)
 		(gimp-image-delete waterImage)
@@ -329,7 +335,9 @@
 )
 )
 
-;Register the script with script-fu
+
+;---------Register the script with script-fu----------
+
 (script-fu-register
 	"create-view-satellite"
 	"Create satellite DF map..."                
@@ -338,18 +346,18 @@
 	""				;copyright notice
 	"May 9, 2011"	;date created
 	""				;
-	SF-STRING	"Elevation Water File -elw-"	"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-elw.bmp"
-	SF-STRING	"Elevation File -el-"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-el.bmp"
-	SF-STRING	"Vegetation File -veg-"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-veg.bmp"
-	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
-	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
-	SF-STRING	"Biome File -bm-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
-	SF-STRING	"Structures File -str-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-str.bmp"
-	SF-STRING	"Rain File -rain-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-rain.bmp"
-	SF-STRING	"Evil File -evil-"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-evil.bmp"
-	SF-STRING	"Trees Texture File"			"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
-	SF-STRING	"Dirt Texture File"				"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_dirt.bmp"
-	SF-STRING	"Mountains Texture File"		"C:\\Users\\Marcus\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_mountains.bmp"
+	SF-STRING	"Elevation Water File -elw-"	"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-elw.bmp"
+	SF-STRING	"Elevation File -el-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-el.bmp"
+	SF-STRING	"Vegetation File -veg-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-veg.bmp"
+	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
+	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
+	SF-STRING	"Biome File -bm-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
+	SF-STRING	"Structures File -str-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-str.bmp"
+	SF-STRING	"Rain File -rain-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-rain.bmp"
+	SF-STRING	"Evil File -evil-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-evil.bmp"
+	SF-STRING	"Trees Texture File"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
+	SF-STRING	"Dirt Texture File"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_dirt.bmp"
+	SF-STRING	"Mountains Texture File"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_mountains.bmp"
 	SF-VALUE	"Atmosphere level (0-2)"		"1"
 )
 
