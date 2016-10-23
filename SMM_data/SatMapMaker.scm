@@ -365,19 +365,19 @@
 	""				;copyright notice
 	"May 9, 2011"	;date created
 	""				;
-	SF-STRING	"Elevation Water File -elw-"	"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-elw.bmp"
-	SF-STRING	"Elevation File -el-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-el.bmp"
-	SF-STRING	"Vegetation File -veg-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-veg.bmp"
-	SF-STRING	"Volcanism File -vol-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-vol.bmp"
-	SF-STRING	"Temperature File -tmp-"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-tmp.bmp"
-	SF-STRING	"Biome File -bm-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-bm.bmp"
-	SF-STRING	"Structures File -str-"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-str.bmp"
-	SF-STRING	"Rain File -rain-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-rain.bmp"
-	SF-STRING	"Evil File -evil-"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\region1-00550-01-01-evil.bmp"
-	SF-STRING	"Trees Texture File"			"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_trees.bmp"
-	SF-STRING	"Dirt Texture File"				"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_dirt.bmp"
-	SF-STRING	"Mountains Texture File"		"C:\\Users\\Documents\\My Games\\Dwarf Fortress 0.40.23\\SMM_data\\sat_mountains.bmp"
-	SF-VALUE	"Atmosphere level (0-2)"		"1"
+	SF-FILENAME	"Elevation Water File -elw-"	""
+	SF-FILENAME	"Elevation File -el-"		""
+	SF-FILENAME	"Vegetation File -veg-"		""
+	SF-FILENAME	"Volcanism File -vol-"		""
+	SF-FILENAME	"Temperature File -tmp-"	""
+	SF-FILENAME	"Biome File -bm-"		""
+	SF-FILENAME	"Structures File -str-"		""
+	SF-FILENAME	"Rain File -rain-"		""
+	SF-FILENAME	"Evil File -evil-"		""
+	SF-FILENAME	"Trees Texture File"		""
+	SF-FILENAME	"Dirt Texture File"		""
+	SF-FILENAME	"Mountains Texture File"	""
+ 	SF-VALUE	"Atmosphere level (0-2)"	"1"
 )
 
 (script-fu-menu-register "create-view-satellite" "<Image>/File/Create/Dwarf Map")
